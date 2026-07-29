@@ -40,7 +40,7 @@ from open_webui.models.groups import Groups
 from open_webui.models.models import Models
 from open_webui.models.users import UserModel
 from open_webui.utils.access_control import check_model_access, has_connection_access, has_permission
-from open_webui.utils.anthropic import get_anthropic_models, is_anthropic_url
+from open_webui.utils.anthropic import get_anthropic_models, is_anthropic_url, prepare_anthropic_headers
 from open_webui.utils.auth import get_admin_user, get_verified_user
 from open_webui.utils.headers import get_custom_headers, include_user_info_headers
 from open_webui.utils.json_codec import JSONCodec
@@ -334,6 +334,7 @@ async def get_anthropic_token_count_target(request: Request, form_data: dict, us
     payload['model'] = strip_provider_model_prefix(payload['model'], prefix_id)
 
     headers, cookies = await get_headers_and_cookies(request, url, key, api_config, user=user)
+    headers = prepare_anthropic_headers(url, key, headers)
     return requested_model, payload, url, key, headers, cookies
 
 
